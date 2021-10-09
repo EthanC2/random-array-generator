@@ -15,9 +15,9 @@ All random numbers are generated using the Mersenne Twister algorithm ([_std::mt
 
 | Code | Explanation |
 | ---- | ----------- |
-| `Dataset<int, 100> arr` | assumes '_RANDOM_'; an array of 100 random integers. |
-| `Dataset<int, 100, RANDOM> arr` | an array of 100 random, integers. |
-| `Dataset<int, 100, SORTED> arr` | an array of 100 random, sorted integers. |
+| `Dataset<int,100> arr` | assumes '_RANDOM_'; an array of 100 random integers. |
+| `Dataset<int,100,RANDOM> arr` | an array of 100 random, integers. |
+| `Dataset<int, 100,SORTED> arr` | an array of 100 random, sorted integers. |
 | `Dataset<int,100,REVERSE_SORTED> arr` | an array of 100 random, reverse-sorted integers. |
 | `Dataset<int,100,NEARLY_SORTED> arr` | an array of 100 random, nearly sorted intgers |
 | `Dataset<int,100,FEW_UNIQUE> arr` | an array of 100 random, few-unique integers |
