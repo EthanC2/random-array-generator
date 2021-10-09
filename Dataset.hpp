@@ -22,7 +22,6 @@
 #include <random>         //Random number generators
 #include <algorithm>     //Sorting functions
 #include <type_traits>  //Type-info for type-guarding
-#include <new>         //Contains the std::bad_alloc exception
 
 //Native C Libraries
 #include <cstddef>     //Contains 'size_t'
@@ -44,7 +43,7 @@ class Dataset
 
     // DATA MEMBERS //
     private:
-        T* array;                //Internal array, generated and freed automatically
+        T array[size];            //Internal array
 
     public:
         const size_t length;   //const!
@@ -57,7 +56,6 @@ class Dataset
     public:
         //Public special methods
         Dataset(T = 1000, T = 0);   //default maximum, minimum
-        ~Dataset();
 
         //Public methods
         void genNewData(T = 1000, T = 0);    //Helper function: generates a new dataset of the appropriate type (RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE)
@@ -86,32 +84,13 @@ class Dataset
 template <typename T, size_t size, Distribution distT>
 Dataset<T, size, distT>::Dataset(T max, T min): length(size)   //Initializer list for const data member
 {
-    //Initialize the array
-    try
-    {
-        array = new T[size];
-    }
-    catch(const std::bad_alloc& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-
     //Generate new data (random, sorted, reverse-sorted, nearly-sorted, or few-unique)
     genNewData(max, min);
 }
 
-//Deconstructor
-template <typename T, size_t size, Distribution distT>
-Dataset<T, size, distT>::~Dataset()
-{
-    //Automatically free internal array
-    delete [] array;
-}
-
-
 // ********** PRIVATE METHODS ********** //
 
-//Generate random data (for: RANDOM, SORTED, REVERSE_SORTED)
+//Generate random data (for: RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED)
 template <typename T, size_t size, Distribution distT>
 void Dataset<T, size, distT>::genRandomData(T max, T min)
 {
@@ -226,7 +205,7 @@ void Dataset<T, size, distT>::genNewData(T max, T min)
 template <typename T, size_t size, Distribution distT>
 T* Dataset<T, size, distT>::get()
 {
-    return array;
+    return &array[0];
 }
 
 //Print
@@ -268,7 +247,7 @@ template <typename T, size_t size, Distribution distT>
 Dataset<T, size, distT>::operator T*() const
 {
     //The name of the array is a pointer to the first element
-    return array;
+    return &array[0];
 }
 
 //[] Overload
