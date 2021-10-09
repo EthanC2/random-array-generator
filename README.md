@@ -7,13 +7,15 @@ reverse sorted, nearly sorted, and few unique). The class is purely a wrapper in
 as an overloaded `T*` operator so that it can be passed as a parameter to a function that takes `T array[]`. When you pass this class to a parameter `T array[]`, it will return 
 return a pointer to the internal array, losing access to the rest of the class members and methods.
 
+Currently, this project only works with integers, but I have plans to update it to work with floating-point numbers.
+
 ## Usage Summary and Examples
 
 | Code | Explanation |
 | ---- | ----------- |
-| `Dataset<int,100> arr` |  |
-| `Dataset<int,100,RANDOM> arr` |  |
-| `Dataset<int,100,SORTED> arr` |  |
+| `Dataset<int,100> arr` | assumes '_RANDOM_'; an array of 20 random integers. |
+| `Dataset<int,100,RANDOM> arr` | an array of 20 random, integers. |
+| `Dataset<int,100,SORTED> arr` | an array of 20 random, sorted integers. |
 | `Dataset<int,100,REVERSE_SORTED> arr` |  |
 | `Dataset<int,100,NEARLY_SORTED> arr` |  |
 | `Dataset<int,100,FEW_UNIQUE> arr` |  |
