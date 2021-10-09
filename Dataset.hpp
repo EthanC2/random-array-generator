@@ -1,7 +1,7 @@
 /*
   Author: Ethan Cox
-  Date: 9/27/2021
-  Compilation Instructions:
+  Date: 10/9/2021
+  Compilation Instructions: Header file. N/A.
   Function: generates a unique array of X elements of numeric values between the values Y and Z of type T
 
   Usage examples:
@@ -10,7 +10,7 @@
   'Dataset<int,20,SORTED> array' is an array of 20 random, sorted integers
   'Dataset<int,20,REVERSE_SORTED> array' is an array of 20 random, sorted integers
   'Dataset<int,20,NEARLY_SORTED> array' is an array of 20, nearly-sorted integers
-  'Dataset<int,20,FEW_UNIQUE> array' is an array of 20, few-unique integers
+  'Dataset<int,20,FEW_UNIQUE> array' is an array of 20, random, few-unique integers
 */
 
 //Header guard
