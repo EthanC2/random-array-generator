@@ -24,7 +24,7 @@ All random numbers are generated using the Mersenne Twister algorithm ([_std::mt
 > Few-unique arrays {sqrt(size)} unique elements. <br />
 
 ## Compilation Instructions
-This project is only a single header file, _Dataset.hpp_, which must be included in another project.
+Not applicable; this project is only a single header file, _Dataset.hpp_, which must be included in another project.
 
 ## License
 This project is available under an MIT license. Do whatever you want with it — public or private.
