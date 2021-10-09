@@ -9,7 +9,8 @@ return a pointer to the internal array, losing access to the rest of the class m
 
 ## Usage Summary and Examples
 
-
+| Code | Explanation |
+| ---- | ----------- |
 | `Dataset<int,100> arr` |  |
 | `Dataset<int,100,RANDOM> arr` |  |
 | `Dataset<int,100,SORTED> arr` |  |
