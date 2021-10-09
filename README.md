@@ -21,7 +21,7 @@ All random numbers are generated using the Mersenne Twister algorithm ([_std::mt
 | `Dataset<int,100,REVERSE_SORTED> arr` | an array of 100 random, reverse-sorted integers. |
 | `Dataset<int,100,NEARLY_SORTED> arr` | an array of 100 random, nearly sorted intgers |
 | `Dataset<int,100,FEW_UNIQUE> arr` | an array of 100 random, few-unique integers |
-> Nearly sorted arrays have {sqrt(sqrt(size))} unsorted elements. <br />
+> Nearly sorted arrays have {sqrt(sqrt(size))} swaps. <br />
 > Few-unique arrays {sqrt(size)} unique elements. <br />
 
 ## Compilation Instructions
