@@ -9,5 +9,8 @@ return a pointer to the internal array, losing access to the rest of the class m
 
 ## Usage Summary and Examples
 
+## Compilation Instructions
+This project is only a single header file, _Dataset.hpp_, which must be included in another project.
+
 ## License
-This project is available under an MIT license. Do whatever you want with it.
+This project is available under an MIT license. Do whatever you want with it — public or private.
