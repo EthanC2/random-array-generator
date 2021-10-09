@@ -10,6 +10,7 @@ return a pointer to the internal array, losing access to the rest of the class m
 Currently, this project only works with integers, but I have plans to update it to work with floating-point numbers.
 
 ## Usage Summary and Examples
+All random numbers are generated using the Mersenne Twister algorithm ([_std::mt19937_](https://www.cplusplus.com/reference/random/mt19937/))
 
 | Code | Explanation |
 | ---- | ----------- |
