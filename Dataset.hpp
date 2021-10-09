@@ -43,31 +43,31 @@ class Dataset
 
     // DATA MEMBERS //
     private:
-        T array[size];            //Internal array
+        T array[size];                //Internal array, generated and freed automatically
 
     public:
         const size_t length;   //const!
 
     // FUNCTION MEMBERS //
     private:
-        void genRandomData(T,T);        //Generate a new dataset, which is sorted if needed
-        void genUniqueData(T,T);       //Generate a new dataset of few-unique data
+        void genRandomData(const T, const T);        //Generate a new dataset, which is sorted if needed
+        void genUniqueData(const T, const T);       //Generate a new dataset of few-unique data
 
     public:
         //Public special methods
-        Dataset(T = 1000, T = 0);   //default maximum, minimum
+        Dataset(const T = 1000, const T = 0);   //default maximum, minimum
 
         //Public methods
-        void genNewData(T = 1000, T = 0);    //Helper function: generates a new dataset of the appropriate type (RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE)
-        void print() const;                 //Prints the array
-        T* get();                          //Return a pointer to the internal array
+        void genNewData(const T = 1000, const T = 0);    //Helper function: generates a new dataset of the appropriate type (RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE)
+        void print() const;                             //Prints the array
+        T* get();                                      //Return a pointer to the internal array
 
         //Iterators
         T* begin() const;              //Beginning of the array
         T* end() const;               //End of the array
 
         //Operator overloads
-        operator T*() const;       //Implicit conversion to pointer (for passing to T[])
+        operator T*();             //Implicit conversion to pointer (for passing to T[])
         T& operator[](size_t);    //[] Overload for accessing class like 'arr[5] = ...'
 };
 
@@ -82,7 +82,7 @@ class Dataset
 
 //Constructor
 template <typename T, size_t size, Distribution distT>
-Dataset<T, size, distT>::Dataset(T max, T min): length(size)   //Initializer list for const data member
+Dataset<T, size, distT>::Dataset(const T max, const T min): length(size)   //Initializer list for const data member
 {
     //Generate new data (random, sorted, reverse-sorted, nearly-sorted, or few-unique)
     genNewData(max, min);
@@ -90,9 +90,9 @@ Dataset<T, size, distT>::Dataset(T max, T min): length(size)   //Initializer lis
 
 // ********** PRIVATE METHODS ********** //
 
-//Generate random data (for: RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED)
+//Generate random data (for: RANDOM, SORTED, REVERSE_SORTED)
 template <typename T, size_t size, Distribution distT>
-void Dataset<T, size, distT>::genRandomData(T max, T min)
+void Dataset<T, size, distT>::genRandomData(const T max, const T min)
 {
     //Create + seed Mersenne Twister random number generator
     std::random_device rd;
@@ -139,7 +139,7 @@ void Dataset<T, size, distT>::genRandomData(T max, T min)
 
 //Generate few-unique data (for: FEW_UNIQUE)
 template <typename T, size_t size, Distribution distT>
-void Dataset<T, size, distT>::genUniqueData(T max, T min)
+void Dataset<T, size, distT>::genUniqueData(const T max, const T min)
 {
     //Create + seed Mersenne Twister random number generator
     std::random_device rd;
@@ -192,7 +192,7 @@ void Dataset<T, size, distT>::genUniqueData(T max, T min)
 
 //Generate a new dataset
 template <typename T, size_t size, Distribution distT>
-void Dataset<T, size, distT>::genNewData(T max, T min)
+void Dataset<T, size, distT>::genNewData(const T max, const T min)
 {
     if constexpr (distT == FEW_UNIQUE)
         genUniqueData(max, min);
@@ -244,15 +244,15 @@ T* Dataset<T, size, distT>::end() const
 
 //T* Conversion Overload (returns a pointer to the internal array of type T)
 template <typename T, size_t size, Distribution distT>
-Dataset<T, size, distT>::operator T*() const
+Dataset<T, size, distT>::operator T*()
 {
     //The name of the array is a pointer to the first element
-    return &array[0];
+    return array;
 }
 
 //[] Overload
 template <typename T, size_t size, Distribution distT>
-T& Dataset<T, size, distT>::operator[](size_t index)
+T& Dataset<T, size, distT>::operator[](const size_t index)
 {
     return array[index];
 }
