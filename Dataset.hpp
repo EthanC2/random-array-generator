@@ -43,7 +43,7 @@ class Dataset
 
     // DATA MEMBERS //
     private:
-        T array[size];                //Internal array, generated and freed automatically
+        T array[size];                //Internal array
 
     public:
         const size_t length;   //const!
