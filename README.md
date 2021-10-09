@@ -9,6 +9,14 @@ return a pointer to the internal array, losing access to the rest of the class m
 
 ## Usage Summary and Examples
 
+
+| `Dataset<int,100> arr` |  |
+| `Dataset<int,100,RANDOM> arr` |  |
+| `Dataset<int,100,SORTED> arr` |  |
+| `Dataset<int,100,REVERSE_SORTED> arr` |  |
+| `Dataset<int,100,NEARLY_SORTED> arr` |  |
+| `Dataset<int,100,FEW_UNIQUE> arr` |  |
+
 ## Compilation Instructions
 This project is only a single header file, _Dataset.hpp_, which must be included in another project.
 
