@@ -13,12 +13,14 @@ Currently, this project only works with integers, but I have plans to update it 
 
 | Code | Explanation |
 | ---- | ----------- |
-| `Dataset<int,100> arr` | assumes '_RANDOM_'; an array of 20 random integers. |
-| `Dataset<int,100,RANDOM> arr` | an array of 20 random, integers. |
-| `Dataset<int,100,SORTED> arr` | an array of 20 random, sorted integers. |
-| `Dataset<int,100,REVERSE_SORTED> arr` |  |
-| `Dataset<int,100,NEARLY_SORTED> arr` |  |
-| `Dataset<int,100,FEW_UNIQUE> arr` |  |
+| `Dataset<int,100> arr` | assumes '_RANDOM_'; an array of 100 random integers. |
+| `Dataset<int,100,RANDOM> arr` | an array of 100 random, integers. |
+| `Dataset<int,100,SORTED> arr` | an array of 100 random, sorted integers. |
+| `Dataset<int,100,REVERSE_SORTED> arr` | an array of 100 random, reverse-sorted integers. |
+| `Dataset<int,100,NEARLY_SORTED> arr` | an array of 100 random, nearly sorted intgers |
+| `Dataset<int,100,FEW_UNIQUE> arr` | an array of 100 random, few-unique integers |
+> Nearly sorted arrays have {sqrt(sqrt(size))} unsorted elements <br />
+> Few-unique arrays {sqrt(size)} unique elements <br />
 
 ## Compilation Instructions
 This project is only a single header file, _Dataset.hpp_, which must be included in another project.
