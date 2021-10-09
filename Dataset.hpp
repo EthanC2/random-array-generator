@@ -6,9 +6,9 @@
 
   Usage examples:
   ===============
-  'Dataset<int,20> array' is an array of 20 random integers, distributed RANDOM
-  'Dataset<int,20,SORTED> array' is an array of 20 random, sorted integers, distributed RANDOMly
-  'Dataset<int,20,REVERSE_SORTED> array' is an array of 20 random, sorted integers, distributed RANDOMly
+  'Dataset<int,20> array' is an array of 20 random integers
+  'Dataset<int,20,SORTED> array' is an array of 20 random, sorted integers
+  'Dataset<int,20,REVERSE_SORTED> array' is an array of 20 random, sorted integers
   'Dataset<int,20,NEARLY_SORTED> array' is an array of 20, nearly-sorted integers
   'Dataset<int,20,FEW_UNIQUE> array' is an array of 20, few-unique integers
 */
