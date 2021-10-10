@@ -38,6 +38,7 @@ class Dataset
 {
     //Guarding against non-numeric types and arrays of an invalid sizes
     static_assert(std::is_integral<T>::value, "Dataset class can only be of an integral type (int, unsigned int, short...etc)");
+    static_assert(not std::is_same<char, T>::value and not std::is_same<wchar_t, T>::value, "Dataset objects must be integral, not character");
     static_assert(size > 0, "The size of the dataset must be a positive integer.");
 
 
