@@ -205,7 +205,8 @@ void Dataset<T, size, distT>::genNewData(const T max, const T min)
 template <typename T, size_t size, Distribution distT>
 T* Dataset<T, size, distT>::get()
 {
-    return &array[0];
+    //Return a pointer to the internal array
+    return array;
 }
 
 //Print
