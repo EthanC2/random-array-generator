@@ -29,15 +29,15 @@
 
 
 //Different types of distribution
-enum Distribution { RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE };
+enum Datatype { RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE };
 
 
 //Dataset class contains a smart pointer to an array of random numeric values
-template <typename T, size_t size, Distribution distT = RANDOM>  //Default distribution is 'RANDOM' (generic random dataset)
+template <typename T, size_t size, Datatype dataT = RANDOM>  //Default distribution is 'RANDOM' (generic random dataset)
 class Dataset
 {
     //Guarding against non-numeric types and arrays of an invalid sizes
-    static_assert(std::is_integral<T>::value, "Dataset class can only be of an integral type (int, unsigned int, short...etc)");
+    static_assert(std::is_integral<T>::value, "Dataset clasws can only be of an integral type (int, unsigned int, short...etc)");
     static_assert(not std::is_same<char, T>::value and not std::is_same<wchar_t, T>::value, "Dataset objects must be integral, not character");
     static_assert(size > 0, "The size of the dataset must be a positive integer.");
 
@@ -82,8 +82,8 @@ class Dataset
 // ********** SPECIAL MEMBER FUNCTIONS **********
 
 //Constructor
-template <typename T, size_t size, Distribution distT>
-Dataset<T, size, distT>::Dataset(const T max, const T min): length(size)   //Initializer list for const data member
+template <typename T, size_t size, Datatype dataT>
+Dataset<T, size, dataT>::Dataset(const T max, const T min): length(size)   //Initializer list for const data member
 {
     //Generate new data (random, sorted, reverse-sorted, nearly-sorted, or few-unique)
     genNewData(max, min);
@@ -92,8 +92,8 @@ Dataset<T, size, distT>::Dataset(const T max, const T min): length(size)   //Ini
 // ********** PRIVATE METHODS ********** //
 
 //Generate random data (for: RANDOM, SORTED, REVERSE_SORTED)
-template <typename T, size_t size, Distribution distT>
-void Dataset<T, size, distT>::genRandomData(const T max, const T min)
+template <typename T, size_t size, Datatype dataT>
+void Dataset<T, size, dataT>::genRandomData(const T max, const T min)
 {
     //Create + seed Mersenne Twister random number generator
     std::random_device rd;
@@ -110,21 +110,21 @@ void Dataset<T, size, distT>::genRandomData(const T max, const T min)
     }
 
     //Sort?
-    if constexpr (distT == SORTED or distT == NEARLY_SORTED)
+    if constexpr (dataT == SORTED or dataT == NEARLY_SORTED)
     {
         //Sort in non-decreasing order (0 -> 1000, with repeats)
         std::sort(array, array + length, [](size_t i, size_t j) {return i < j;});  //lambda expression
     }
 
     //Reverse sort?
-    if constexpr (distT == REVERSE_SORTED)
+    if constexpr (dataT == REVERSE_SORTED)
     {
         //Sort in non-increasing order (1000 -> 0, with repeats)
         std::sort(array, array + length, [](size_t i, size_t j) {return i > j;});  //lambda expression
     }
 
     //Nearly sorted? 
-    if constexpr (distT == NEARLY_SORTED)
+    if constexpr (dataT == NEARLY_SORTED)
     {
         //Mess up the order :D! (just a bit)
         std::uniform_int_distribution<T> randomIndex(0, size-1);      //Random index generator 
@@ -139,8 +139,8 @@ void Dataset<T, size, distT>::genRandomData(const T max, const T min)
 }
 
 //Generate few-unique data (for: FEW_UNIQUE)
-template <typename T, size_t size, Distribution distT>
-void Dataset<T, size, distT>::genUniqueData(const T max, const T min)
+template <typename T, size_t size, Datatype dataT>
+void Dataset<T, size, dataT>::genUniqueData(const T max, const T min)
 {
     //Create + seed Mersenne Twister random number generator
     std::random_device rd;
@@ -192,10 +192,10 @@ void Dataset<T, size, distT>::genUniqueData(const T max, const T min)
 // ********** PUBLIC METHODS **********
 
 //Generate a new dataset
-template <typename T, size_t size, Distribution distT>
-void Dataset<T, size, distT>::genNewData(const T max, const T min)
+template <typename T, size_t size, Datatype dataT>
+void Dataset<T, size, dataT>::genNewData(const T max, const T min)
 {
-    if constexpr (distT == FEW_UNIQUE)
+    if constexpr (dataT == FEW_UNIQUE)
         genUniqueData(max, min);
     else
         genRandomData(max, min);  //sorting is automatically taken care of here
@@ -203,16 +203,16 @@ void Dataset<T, size, distT>::genNewData(const T max, const T min)
 }
 
 //Return a pointer to the array (not really necessary because of implicit T* conversion)
-template <typename T, size_t size, Distribution distT>
-T* Dataset<T, size, distT>::get()
+template <typename T, size_t size, Datatype dataT>
+T* Dataset<T, size, dataT>::get()
 {
     //Return a pointer to the internal array
     return array;
 }
 
 //Print
-template <typename T, size_t size, Distribution distT>
-void Dataset<T, size, distT>::print() const
+template <typename T, size_t size, Datatype dataT>
+void Dataset<T, size, dataT>::print() const
 {
     //Print all the values of the array
     for(size_t i=0; i < size; i++)
@@ -226,8 +226,8 @@ void Dataset<T, size, distT>::print() const
 // ********** ITERATORS ********** 
 
 //Begin iterator
-template <typename T, size_t size, Distribution distT>
-T* Dataset<T, size, distT>::begin() const
+template <typename T, size_t size, Datatype dataT>
+T* Dataset<T, size, dataT>::begin() const
 {
     //Return the address of the first element in the array
     return &array[0];
@@ -235,8 +235,8 @@ T* Dataset<T, size, distT>::begin() const
 
 
 //End iterator
-template <typename T, size_t size, Distribution distT>
-T* Dataset<T, size, distT>::end() const
+template <typename T, size_t size, Datatype dataT>
+T* Dataset<T, size, dataT>::end() const
 {                            
     //Return the address of the last element in the array          
     return &array[0] + length;
@@ -245,16 +245,16 @@ T* Dataset<T, size, distT>::end() const
 // ********** OPERATOR OVERLOADING **********
 
 //T* Conversion Overload (returns a pointer to the internal array of type T)
-template <typename T, size_t size, Distribution distT>
-Dataset<T, size, distT>::operator T*()
+template <typename T, size_t size, Datatype dataT>
+Dataset<T, size, dataT>::operator T*()
 {
     //The name of the array is a pointer to the first element
     return array;
 }
 
 //[] Overload
-template <typename T, size_t size, Distribution distT>
-T& Dataset<T, size, distT>::operator[](const size_t index)
+template <typename T, size_t size, Datatype dataT>
+T& Dataset<T, size, dataT>::operator[](const size_t index)
 {
     return array[index];
 }
