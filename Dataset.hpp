@@ -22,6 +22,7 @@
 #include <random>         //Random number generators
 #include <algorithm>     //Sorting functions
 #include <type_traits>  //Type-info for type-guarding
+#include <stdexcept>   //Contains 'std::invalid_argument'
 
 //Native C Libraries
 #include <cstddef>     //Contains 'size_t'
@@ -56,10 +57,10 @@ class Dataset
 
     public:
         //Public special methods
-        Dataset(const T = 1000, const T = 0);   //default maximum, minimum
+        Dataset(const T = 0, const T = 1000);   //default minimum, maximum
 
         //Public methods
-        void genNewData(const T = 1000, const T = 0);    //Helper function: generates a new dataset of the appropriate type (RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE)
+        void genNewData(const T = 0, const T = 1000);    //Helper function: generates a new dataset of the appropriate type (RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE)
         void print() const;                             //Prints the array
         T* get();                                      //Return a pointer to the internal array
 
@@ -83,8 +84,11 @@ class Dataset
 
 //Constructor
 template <typename T, size_t size, Datatype dataT>
-Dataset<T, size, dataT>::Dataset(const T max, const T min): length(size)   //Initializer list for const data member
+Dataset<T, size, dataT>::Dataset(const T min, const T max): length(size)   //Initializer list for const data member
 {
+    if (max < min)
+        throw std::invalid_argument("invalid range; maximum cannnot be less than the minimum.");
+
     //Generate new data (random, sorted, reverse-sorted, nearly-sorted, or few-unique)
     genNewData(max, min);
 }
@@ -93,8 +97,11 @@ Dataset<T, size, dataT>::Dataset(const T max, const T min): length(size)   //Ini
 
 //Generate random data (for: RANDOM, SORTED, REVERSE_SORTED)
 template <typename T, size_t size, Datatype dataT>
-void Dataset<T, size, dataT>::genRandomData(const T max, const T min)
+void Dataset<T, size, dataT>::genRandomData(const T min, const T max)
 {
+    if (max < min)
+        throw std::invalid_argument("invalid range; maximum cannnot be less than the minimum.");
+
     //Create + seed Mersenne Twister random number generator
     std::random_device rd;
     std::mt19937 RNG(rd());
@@ -140,8 +147,11 @@ void Dataset<T, size, dataT>::genRandomData(const T max, const T min)
 
 //Generate few-unique data (for: FEW_UNIQUE)
 template <typename T, size_t size, Datatype dataT>
-void Dataset<T, size, dataT>::genUniqueData(const T max, const T min)
+void Dataset<T, size, dataT>::genUniqueData(const T min, const T max)
 {
+    if (max < min)
+        throw std::invalid_argument("invalid range; maximum cannnot be less than the minimum.");
+
     //Create + seed Mersenne Twister random number generator
     std::random_device rd;
     std::mt19937 RNG(rd());
@@ -193,7 +203,7 @@ void Dataset<T, size, dataT>::genUniqueData(const T max, const T min)
 
 //Generate a new dataset
 template <typename T, size_t size, Datatype dataT>
-void Dataset<T, size, dataT>::genNewData(const T max, const T min)
+void Dataset<T, size, dataT>::genNewData(const T min, const T max)
 {
     if constexpr (dataT == FEW_UNIQUE)
         genUniqueData(max, min);
