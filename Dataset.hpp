@@ -1,6 +1,7 @@
 /*
   Author: Ethan Cox
   Date: 10/9/2021
+  Version: C++17
   Compilation Instructions: Header file. N/A.
   Function: generates a unique array of X elements of numeric values between the values Y and Z of type T
 
