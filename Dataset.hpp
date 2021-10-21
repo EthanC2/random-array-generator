@@ -18,10 +18,9 @@
 #pragma once
 
 //Native C++ Libraries
-#include <iostream>           //Input/output
-#include <iomanip>           //Formatting floats
-#include <random>           //Random number generators
-#include <array>           //std::array for compile-time and run-time bounds checking, optimizations, etc...
+#include <iostream>          //Input/output
+#include <iomanip>          //Formatting floats
+#include <random>          //Random number generators
 #include <algorithm>      //Sorting functions
 #include <type_traits>   //Type-info for type-guarding
 #include <stdexcept>    //Contains 'std::invalid_argument'
