@@ -30,7 +30,7 @@
 #include <cmath>      //Contains 'sqrt()'
 
 
-//Different types of distribution (as an enum class for type safety)
+//Different types of datasets (as an enum class for type safety)
 enum class DT { RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE };
 
 
