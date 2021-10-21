@@ -8,34 +8,35 @@
   Usage examples:
   ===============
   'Dataset<int,20> array' is an array of 20 random integers
-  'Dataset<int,20,SORTED> array' is an array of 20 random, sorted integers
-  'Dataset<int,20,REVERSE_SORTED> array' is an array of 20 random, sorted integers
-  'Dataset<int,20,NEARLY_SORTED> array' is an array of 20, nearly-sorted integers
-  'Dataset<int,20,FEW_UNIQUE> array' is an array of 20, random, few-unique integers
+  'Dataset<int,20, DT::SORTED> array' is an array of 20 random, sorted integers
+  'Dataset<int,20, DT::REVERSE_SORTED> array' is an array of 20 random, sorted integers
+  'Dataset<int,20, DT::NEARLY_SORTED> array' is an array of 20, nearly-sorted integers
+  'Dataset<int,20, DT::FEW_UNIQUE> array' is an array of 20, random, few-unique integers
 */
 
 //Header guard
 #pragma once
 
 //Native C++ Libraries
-#include <iostream>         //Input/output
-#include <iomanip>         //Formatting floats
-#include <random>         //Random number generators
-#include <algorithm>     //Sorting functions
-#include <type_traits>  //Type-info for type-guarding
-#include <stdexcept>   //Contains 'std::invalid_argument'
+#include <iostream>           //Input/output
+#include <iomanip>           //Formatting floats
+#include <random>           //Random number generators
+#include <array>           //std::array for compile-time and run-time bounds checking, optimizations, etc...
+#include <algorithm>      //Sorting functions
+#include <type_traits>   //Type-info for type-guarding
+#include <stdexcept>    //Contains 'std::invalid_argument'
 
 //Native C Libraries
 #include <cstddef>     //Contains 'size_t'
 #include <cmath>      //Contains 'sqrt()'
 
 
-//Different types of distribution
-enum Datatype { RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE };
+//Different types of distribution (as an enum class for type safety)
+enum class DT { RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE };
 
 
 //Dataset class contains a smart pointer to an array of random numeric values
-template <typename T, size_t size, Datatype dataT = RANDOM>  //Default distribution is 'RANDOM' (generic random dataset)
+template <typename T, size_t size, DT dataT = DT::RANDOM>  //Default distribution is 'RANDOM' (generic random dataset)
 class Dataset
 {
     //Guarding against non-numeric types and arrays of an invalid sizes
@@ -46,7 +47,7 @@ class Dataset
 
     // DATA MEMBERS //
     private:
-        T array[size];                //Internal array
+        T dataset[size];                //Internal array
 
     public:
         const size_t length;   //const!
@@ -58,16 +59,16 @@ class Dataset
 
     public:
         //Public special methods
-        Dataset(const T = 0, const T = 1000);   //default minimum, maximum
+        constexpr Dataset(const T = 0, const T = 1000);   //default minimum, maximum
 
         //Public methods
         void genNewData(const T = 0, const T = 1000);    //Helper function: generates a new dataset of the appropriate type (RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE)
         void print() const;                             //Prints the array
-        T* get();                                      //Return a pointer to the internal array
+        constexpr T* get() const noexcept;             //Return a pointer to the internal array
 
         //Iterators
-        T* begin() const;              //Beginning of the array
-        T* end() const;               //End of the array
+        constexpr T* begin() const noexcept;              //Beginning of the array
+        constexpr T* end() const noexcept;               //End of the array
 
         //Operator overloads
         operator T*();             //Implicit conversion to pointer (for passing to T[])
@@ -84,8 +85,8 @@ class Dataset
 // ********** SPECIAL MEMBER FUNCTIONS **********
 
 //Constructor
-template <typename T, size_t size, Datatype dataT>
-Dataset<T, size, dataT>::Dataset(const T min, const T max): length(size)   //Initializer list for const data member
+template <typename T, size_t size, DT dataT>
+constexpr Dataset<T, size, dataT>::Dataset(const T min, const T max): length(size)   //Initializer list for const data member
 {
     if (max < min)
         throw std::invalid_argument("invalid range; maximum cannnot be less than the minimum.");
@@ -97,7 +98,7 @@ Dataset<T, size, dataT>::Dataset(const T min, const T max): length(size)   //Ini
 // ********** PRIVATE METHODS ********** //
 
 //Generate random data (for: RANDOM, SORTED, REVERSE_SORTED)
-template <typename T, size_t size, Datatype dataT>
+template <typename T, size_t size, DT dataT>
 void Dataset<T, size, dataT>::genRandomData(const T min, const T max)
 {
     if (max < min)
@@ -114,25 +115,25 @@ void Dataset<T, size, dataT>::genRandomData(const T min, const T max)
     for(size_t i=0; i < size; i++)
     {
         //Generate a random value between the minimum and maximum
-        array[i] = distribution(RNG);
+        dataset[i] = distribution(RNG);
     }
 
     //Sort?
-    if constexpr (dataT == SORTED or dataT == NEARLY_SORTED)
+    if constexpr (dataT == DT::SORTED or dataT == DT::NEARLY_SORTED)
     {
         //Sort in non-decreasing order (0 -> 1000, with repeats)
-        std::sort(array, array + length, [](size_t i, size_t j) {return i < j;});  //lambda expression
+        std::sort(dataset, dataset + length, [](size_t i, size_t j) {return i < j;});  //lambda expression
     }
 
     //Reverse sort?
-    if constexpr (dataT == REVERSE_SORTED)
+    if constexpr (dataT == DT::REVERSE_SORTED)
     {
         //Sort in non-increasing order (1000 -> 0, with repeats)
-        std::sort(array, array + length, [](size_t i, size_t j) {return i > j;});  //lambda expression
+        std::sort(dataset, dataset + length, [](size_t i, size_t j) {return i > j;});  //lambda expression
     }
 
     //Nearly sorted? 
-    if constexpr (dataT == NEARLY_SORTED)
+    if constexpr (dataT == DT::NEARLY_SORTED)
     {
         //Mess up the order :D! (just a bit)
         std::uniform_int_distribution<T> randomIndex(0, size-1);      //Random index generator 
@@ -141,13 +142,13 @@ void Dataset<T, size, dataT>::genRandomData(const T min, const T max)
         for(size_t i=0; i < amount; i++)
         {
            //Swap two random element
-           std::swap(array[randomIndex(RNG)], array[randomIndex(RNG)]);
+           std::swap(dataset[randomIndex(RNG)], dataset[randomIndex(RNG)]);
         }
     }
 }
 
 //Generate few-unique data (for: FEW_UNIQUE)
-template <typename T, size_t size, Datatype dataT>
+template <typename T, size_t size, DT dataT>
 void Dataset<T, size, dataT>::genUniqueData(const T min, const T max)
 {
     if (max < min)
@@ -180,14 +181,14 @@ void Dataset<T, size, dataT>::genUniqueData(const T min, const T max)
     for(i; i < amount; i++)
     {
         //Generate a random value
-        array[i] = distribution(RNG);
+        dataset[i] = distribution(RNG);
     }
 
     //Use the random sample to propagate the rest of the data
     for(i; i < size; i++)  
     {
         //Generate a random value from the sample set
-        array[i] = array[randomSampleIndex(RNG)];
+        dataset[i] = dataset[randomSampleIndex(RNG)];
     }
 
 
@@ -195,7 +196,7 @@ void Dataset<T, size, dataT>::genUniqueData(const T min, const T max)
     for(int j=0; j < amount; j++)
     {
         //Swap the current element from the sample list with a random element
-        std::swap(array[j], array[randomIndex(RNG)]);
+        std::swap(dataset[j], dataset[randomIndex(RNG)]);
     }
 }
 
@@ -203,10 +204,10 @@ void Dataset<T, size, dataT>::genUniqueData(const T min, const T max)
 // ********** PUBLIC METHODS **********
 
 //Generate a new dataset
-template <typename T, size_t size, Datatype dataT>
+template <typename T, size_t size, DT dataT>
 void Dataset<T, size, dataT>::genNewData(const T min, const T max)
 {
-    if constexpr (dataT == FEW_UNIQUE)
+    if constexpr (dataT == DT::FEW_UNIQUE)
         genUniqueData(max, min);
     else
         genRandomData(max, min);  //sorting is automatically taken care of here
@@ -214,21 +215,21 @@ void Dataset<T, size, dataT>::genNewData(const T min, const T max)
 }
 
 //Return a pointer to the array (not really necessary because of implicit T* conversion)
-template <typename T, size_t size, Datatype dataT>
-T* Dataset<T, size, dataT>::get()
+template <typename T, size_t size, DT dataT>
+constexpr T* Dataset<T, size, dataT>::get() const noexcept
 {
     //Return a pointer to the internal array
-    return array;
+    return &dataset[0];
 }
 
 //Print
-template <typename T, size_t size, Datatype dataT>
+template <typename T, size_t size, DT dataT>
 void Dataset<T, size, dataT>::print() const
 {
     //Print all the values of the array
     for(size_t i=0; i < size; i++)
     {
-        std::cout << array[i] << " ";
+        std::cout << dataset[i] << " ";
     }
     std::cout << std::endl;
 }
@@ -237,35 +238,35 @@ void Dataset<T, size, dataT>::print() const
 // ********** ITERATORS ********** 
 
 //Begin iterator
-template <typename T, size_t size, Datatype dataT>
-T* Dataset<T, size, dataT>::begin() const
+template <typename T, size_t size, DT dataT>
+constexpr T* Dataset<T, size, dataT>::begin() const noexcept
 {
     //Return the address of the first element in the array
-    return &array[0];
+    return &dataset[0];
 }
 
 
 //End iterator
-template <typename T, size_t size, Datatype dataT>
-T* Dataset<T, size, dataT>::end() const
+template <typename T, size_t size, DT dataT>
+constexpr T* Dataset<T, size, dataT>::end() const noexcept
 {                            
     //Return the address of the last element in the array          
-    return &array[0] + length;
+    return &dataset[0] + length;
 }
 
 // ********** OPERATOR OVERLOADING **********
 
 //T* Conversion Overload (returns a pointer to the internal array of type T)
-template <typename T, size_t size, Datatype dataT>
+template <typename T, size_t size, DT dataT>
 Dataset<T, size, dataT>::operator T*()
 {
     //The name of the array is a pointer to the first element
-    return array;
+    return dataset;
 }
 
 //[] Overload
-template <typename T, size_t size, Datatype dataT>
+template <typename T, size_t size, DT dataT>
 T& Dataset<T, size, dataT>::operator[](const size_t index)
 {
-    return array[index];
+    return dataset[index];
 }
