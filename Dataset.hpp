@@ -39,7 +39,7 @@ template <typename T, size_t size, DT dataT = DT::RANDOM>  //Default distributio
 class Dataset
 {
     //Guarding against non-numeric types
-    static_assert(std::is_integral<T>::value, "Dataset clasws can only be of an integral type (int, unsigned int, short...etc)");
+    static_assert(std::is_integral<T>::value, "Dataset class can only be of an integral type (int, unsigned int, short...etc)");
     static_assert(not std::is_same<char, T>::value and not std::is_same<wchar_t, T>::value, "Dataset objects must be integral, not character");
 
 
