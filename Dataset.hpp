@@ -39,10 +39,9 @@ enum class DT { RANDOM, SORTED, REVERSE_SORTED, NEARLY_SORTED, FEW_UNIQUE };
 template <typename T, size_t size, DT dataT = DT::RANDOM>  //Default distribution is 'RANDOM' (generic random dataset)
 class Dataset
 {
-    //Guarding against non-numeric types and arrays of an invalid sizes
+    //Guarding against non-numeric types
     static_assert(std::is_integral<T>::value, "Dataset clasws can only be of an integral type (int, unsigned int, short...etc)");
     static_assert(not std::is_same<char, T>::value and not std::is_same<wchar_t, T>::value, "Dataset objects must be integral, not character");
-    static_assert(size > 0, "The size of the dataset must be a positive integer.");
 
 
     // DATA MEMBERS //
