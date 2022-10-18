@@ -1,5 +1,5 @@
 # random-array-generator
-This project was a product of a need for a vast amount of randomly-generated for testing my code in my algorithms class. I used C++17's _if constexpr_ to reduce the size of the 
+Utility for my project in my algorithms class from 2021. This project was a product of a need for a vast amount of randomly-generated for testing my code in my algorithms class. I used C++17's _if constexpr_ to reduce the size of the 
 class where it wasn't needed as well as _noexcept_ to allow for more optimizations. If you don't want to use C++17, then just remove all instances of _constexpr_ and _noexcept_ 
 uses with `:%s/constexpr//g` and `:%s/noexcept//g` (Vim).
 
